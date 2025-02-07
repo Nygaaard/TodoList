@@ -1,17 +1,11 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import { TodoSchema } from "./interfaces/TodoInterface";
+import Todo from "./components/Todo";
 
 const App = () => {
-  //Interface Todo
-  interface Todo {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-  }
-
   //States
-  const [todos, setTodos] = useState<Todo>([]);
+  const [todos, setTodos] = useState<TodoSchema[] | []>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,10 +34,13 @@ const App = () => {
   return (
     <div>
       <h1>Todo List</h1>
-
-      {loading && <p>Laddar...</p>}
-
-      {error && <p>{error}</p>}
+      {loading && <p>Laddar...</p>} {/*Laddning*/}
+      {error && <p>{error}</p>} {/*Error-meddelanden*/}
+      <div className="todos">
+        {todos.map((todo) => (
+          <Todo todo={todo} key={todo.id} />
+        ))}
+      </div>
     </div>
   );
 };
