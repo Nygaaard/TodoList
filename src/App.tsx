@@ -3,6 +3,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import { TodoSchema } from "./interfaces/TodoInterface";
 import Todo from "./components/Todo";
+import TodoForm from "./components/TodoForm";
 
 const App = () => {
   //States
@@ -44,9 +45,10 @@ const App = () => {
       {error && <p>{error}</p>} {/*Error-meddelanden*/}
       <div className="todos">
         {todos.map((todo) => (
-          <Todo todo={todo} key={todo.id} />
+          <Todo todo={todo} key={todo.id} onTodoUpdate={getData} />
         ))}
       </div>
+      <TodoForm onTodoAdded={getData} />
     </div>
   );
 };
