@@ -1,3 +1,4 @@
+//Importer
 import "./App.css";
 import { useState, useEffect } from "react";
 import { TodoSchema } from "./interfaces/TodoInterface";
@@ -9,12 +10,15 @@ const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  //Skriv ut todos direkt vid sidladdning
   useEffect(() => {
     getData();
   }, []);
 
+  //Funktion för att hämta todos
   const getData = async () => {
     try {
+      //Aktivera laddning
       setLoading(true);
       const response = await fetch("http://localhost:3000/todos");
 
@@ -22,11 +26,13 @@ const App = () => {
         throw Error("Något gick fel..." + response.status);
       } else {
         const data = await response.json();
+        //Set todos med data
         setTodos(data);
       }
     } catch (error) {
       setError("Något gick fel vid hämtning... " + error);
     } finally {
+      //Avbryt laddning
       setLoading(false);
     }
   };
