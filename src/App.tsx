@@ -1,4 +1,4 @@
-// Importer
+// App.tsx
 import "./App.css";
 import { useState, useEffect } from "react";
 import { TodoSchema } from "./interfaces/TodoInterface";
@@ -48,7 +48,7 @@ const App = () => {
           <Todo todo={todo} key={todo.id} onTodoUpdate={getData} />
         ))}
       </div>
-      <TodoForm onTodoAdded={getData} />
+      <TodoForm />
     </div>
   );
 };

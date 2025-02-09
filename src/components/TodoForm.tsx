@@ -1,85 +1,127 @@
-import { useState } from "react";
+// Imports
 import "../styles/TodoForm.css";
+import { useState } from "react";
+import * as yup from "yup";
+import { TodoSchema, ErrorsData } from "../interfaces/TodoInterface";
 
-const TodoForm = ({ onTodoAdded }: { onTodoAdded: () => void }) => {
-  //Skapar state för respektive fält
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("Ej påbörjad");
+const TodoForm = () => {
+  // State för Todo
+  const [todo, setTodo] = useState<TodoSchema>({
+    id: "",
+    title: "",
+    description: "",
+    status: "Ej påbörjad", // Standardvärde
+  });
 
-  //Funktion som hanterar POST-anrop
-  const handleSubmit = async (event: React.FormEvent) => {
+  // State för valideringsfel
+  const [errors, setErrors] = useState<ErrorsData>({});
+
+  // Valideringsschema med yup
+  const validationSchema = yup.object({
+    title: yup
+      .string()
+      .required("Du måste fylla i en titel")
+      .min(3, "Titeln måste vara minst 3 tecken"),
+    description: yup
+      .string()
+      .required("Du måste lägga till en beskrivning")
+      .min(1, "Beskrivningen måste vara minst 1 tecken")
+      .max(200, "Beskrivningen kan vara max 200 tecken"),
+    status: yup.string().required("Du måste välja en status"),
+  });
+
+  // Array med status-värden
+  const statusValues = ["Ej påbörjad", "Pågående", "Avklarad"];
+
+  // Funktion för att skicka formuläret
+  const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const newTodo = { title, description, status };
-
     try {
+      await validationSchema.validate(todo, { abortEarly: false });
+      setErrors({});
+
+      // Skicka todo till backend
       const response = await fetch("http://localhost:3000/todos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newTodo),
+        body: JSON.stringify(todo),
       });
 
       if (!response.ok) {
         throw new Error("Något gick fel vid skapandet av todo.");
       }
 
-      // Nollställ formuläret efter lyckad inlämning
-      setTitle("");
-      setDescription("");
-      setStatus("Ej påbörjad");
+      // Få det skapade todo-objektet med id från backend
+      const createdTodo = await response.json();
 
-      // Uppdatera todo-listan
-      onTodoAdded();
-    } catch (error) {
-      console.error(error);
+      // Uppdatera state med det skapade todo-objektet
+      setTodo({
+        id: createdTodo.id,
+        title: "",
+        description: "",
+        status: "Ej påbörjad",
+      });
+
+      console.log("Todo skickad: ", createdTodo);
+    } catch (errors) {
+      const validationErrors: ErrorsData = {};
+
+      if (errors instanceof yup.ValidationError) {
+        errors.inner.forEach((error) => {
+          const prop = error.path as keyof ErrorsData;
+          validationErrors[prop] = error.message;
+        });
+
+        setErrors(validationErrors);
+      }
     }
   };
 
   return (
-    <div>
-      <h3>Ny Todo</h3>
-      <form onSubmit={handleSubmit} className="todo-form">
-        <label htmlFor="title">Titel:</label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          value={title}
-          //Sätt titel
-          onChange={(event) => setTitle(event.target.value)}
-          required
-        />
-        <br />
-        <label htmlFor="description">Beskrivning:</label>
-        <input
-          type="text"
-          name="description"
-          id="description"
-          value={description}
-          //Sätt beskrivning
-          onChange={(event) => setDescription(event.target.value)}
-          required
-        />
-        <br />
-        <label htmlFor="status">Status:</label>
-        <select
-          name="status"
-          id="status"
-          value={status}
-          //Bestäm status
-          onChange={(event) => setStatus(event.target.value)}
-        >
-          <option>Ej påbörjad</option>
-          <option>Pågående</option>
-          <option>Avklarad</option>
-        </select>
-        <br />
-        <button type="submit">Lägg till Todo</button>
-      </form>
-    </div>
+    <form onSubmit={submitForm}>
+      <label htmlFor="title">Titel:</label>
+      <input
+        type="text"
+        name="title"
+        id="title"
+        value={todo.title}
+        onChange={(event) => setTodo({ ...todo, title: event.target.value })}
+      />
+      {errors.title && <span>{errors.title}</span>}
+      <br />
+
+      <label htmlFor="description">Beskrivning:</label>
+      <input
+        type="text"
+        name="description"
+        id="description"
+        value={todo.description}
+        onChange={(event) =>
+          setTodo({ ...todo, description: event.target.value })
+        }
+      />
+      {errors.description && <span>{errors.description}</span>}
+      <br />
+
+      <label htmlFor="status">Status:</label>
+      <select
+        name="status"
+        id="status"
+        value={todo.status}
+        onChange={(event) => setTodo({ ...todo, status: event.target.value })}
+      >
+        {statusValues.map((status, id) => (
+          <option key={id}>{status}</option>
+        ))}
+      </select>
+      {errors.status && <span>{errors.status}</span>}
+      <br />
+
+      <input type="submit" value="Lägg till Todo" />
+    </form>
   );
 };
 

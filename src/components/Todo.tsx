@@ -1,3 +1,4 @@
+// Imports
 import { TodoSchema as TodoInterface } from "../interfaces/TodoInterface";
 import "../styles/Todo.css";
 
