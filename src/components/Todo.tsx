@@ -1,4 +1,5 @@
 import { TodoSchema as TodoInterface } from "../interfaces/TodoInterface";
+import "../styles/Todo.css";
 
 const Todo = ({
   todo,
@@ -7,14 +8,14 @@ const Todo = ({
   todo: TodoInterface;
   onTodoUpdate: () => void;
 }) => {
-  // Definiera färger för respektive status
-  const statusColor =
+  // Mappa status till klassnamn
+  const statusClass =
     todo.status === "Ej påbörjad"
-      ? "red"
+      ? "status-not-started"
       : todo.status === "Pågående"
-      ? "orange"
+      ? "status-in-progress"
       : todo.status === "Avklarad"
-      ? "green"
+      ? "status-completed"
       : "";
 
   // Funktion för att uppdatera status
@@ -59,10 +60,10 @@ const Todo = ({
   };
 
   return (
-    <section>
+    <section className="todo-card">
       <h2>{todo.title}</h2>
       <p>{todo.description}</p>
-      <p style={{ color: statusColor }}>
+      <p className={`todo-status ${statusClass}`}>
         <strong>{todo.status}</strong>
       </p>
       <form>
@@ -78,12 +79,11 @@ const Todo = ({
           <option>Avklarad</option>
         </select>
       </form>
-      <button
-        onClick={deleteTodo}
-        style={{ backgroundColor: "red", color: "white", marginTop: "10px" }}
-      >
-        Radera
-      </button>
+      <div className="todo-actions">
+        <button className="delete-btn" onClick={deleteTodo}>
+          Radera
+        </button>
+      </div>
     </section>
   );
 };

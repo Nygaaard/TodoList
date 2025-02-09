@@ -1,0 +1,29 @@
+/* App.css */
+.app-container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  margin: 20px auto;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.loading,
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.todos {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

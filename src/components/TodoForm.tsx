@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/TodoForm.css";
 
 const TodoForm = ({ onTodoAdded }: { onTodoAdded: () => void }) => {
   //Skapar state för respektive fält
@@ -40,7 +41,7 @@ const TodoForm = ({ onTodoAdded }: { onTodoAdded: () => void }) => {
   return (
     <div>
       <h3>Ny Todo</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="todo-form">
         <label htmlFor="title">Titel:</label>
         <input
           type="text"
