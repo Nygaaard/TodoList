@@ -1,4 +1,3 @@
-//Importer
 import { TodoSchema as TodoInterface } from "../interfaces/TodoInterface";
 
 const Todo = ({
@@ -8,7 +7,7 @@ const Todo = ({
   todo: TodoInterface;
   onTodoUpdate: () => void;
 }) => {
-  //Definiera färger för respektive status
+  // Definiera färger för respektive status
   const statusColor =
     todo.status === "Ej påbörjad"
       ? "red"
@@ -18,27 +17,44 @@ const Todo = ({
       ? "green"
       : "";
 
+  // Funktion för att uppdatera status
   const updateTodo = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = event.target.value;
-
-    const newTodo = { ...todo, status: newStatus };
+    const updatedTodo = { ...todo, status: newStatus };
 
     try {
-      const response = await fetch("http://localhost:3000/todos/" + todo.id, {
+      const response = await fetch(`http://localhost:3000/todos/${todo.id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(newTodo),
+        body: JSON.stringify(updatedTodo),
       });
 
       if (!response.ok) {
-        throw Error;
+        throw new Error("Något gick fel vid uppdatering.");
       }
 
       onTodoUpdate();
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    }
+  };
+
+  // Funktion för att radera en todo
+  const deleteTodo = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/todos/${todo.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Något gick fel vid radering.");
+      }
+
+      onTodoUpdate();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -46,7 +62,7 @@ const Todo = ({
     <section>
       <h2>{todo.title}</h2>
       <p>{todo.description}</p>
-      <p style={{ color: statusColor } /*Lägger till färg*/}>
+      <p style={{ color: statusColor }}>
         <strong>{todo.status}</strong>
       </p>
       <form>
@@ -62,6 +78,12 @@ const Todo = ({
           <option>Avklarad</option>
         </select>
       </form>
+      <button
+        onClick={deleteTodo}
+        style={{ backgroundColor: "red", color: "white", marginTop: "10px" }}
+      >
+        Radera
+      </button>
     </section>
   );
 };
