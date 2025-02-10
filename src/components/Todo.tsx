@@ -62,6 +62,7 @@ const Todo = ({
 
   return (
     <section className="todo-card">
+      {/* Skriv ut värden */}
       <h2>{todo.title}</h2>
       <p>{todo.description}</p>
       <p className={`todo-status ${statusClass}`}>
@@ -73,6 +74,7 @@ const Todo = ({
           name="status"
           id="status"
           defaultValue={todo.status}
+          //Uppdatera vid statusändring
           onChange={updateTodo}
           className="select-options"
         >
@@ -82,6 +84,7 @@ const Todo = ({
         </select>
       </form>
       <div className="todo-actions">
+        {/*Radera todo*/}
         <button className="delete-btn" onClick={deleteTodo}>
           Radera
         </button>

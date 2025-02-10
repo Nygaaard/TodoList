@@ -81,6 +81,7 @@ const TodoForm = () => {
   };
 
   return (
+    //Kör submit-funktion
     <form onSubmit={submitForm} className="form-container">
       <h3 style={{ marginBottom: "2rem" }}>Lägg till:</h3>
       <div className="form-group">
@@ -90,6 +91,7 @@ const TodoForm = () => {
           name="title"
           id="title"
           value={todo.title}
+          //Uppdatera state
           onChange={(event) => setTodo({ ...todo, title: event.target.value })}
           className="input-field"
         />
@@ -104,6 +106,7 @@ const TodoForm = () => {
           id="description"
           value={todo.description}
           onChange={(event) =>
+            //Uppdatera state
             setTodo({ ...todo, description: event.target.value })
           }
           className="input-field"
@@ -119,9 +122,11 @@ const TodoForm = () => {
           name="status"
           id="status"
           value={todo.status}
+          //Uppdatera state
           onChange={(event) => setTodo({ ...todo, status: event.target.value })}
           className="select-field"
         >
+          {/*Loopa igenom option-alternativ*/}
           {statusValues.map((status, id) => (
             <option key={id}>{status}</option>
           ))}
