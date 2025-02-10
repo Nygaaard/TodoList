@@ -81,46 +81,57 @@ const TodoForm = () => {
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <label htmlFor="title">Titel:</label>
-      <input
-        type="text"
-        name="title"
-        id="title"
-        value={todo.title}
-        onChange={(event) => setTodo({ ...todo, title: event.target.value })}
-      />
-      {errors.title && <span>{errors.title}</span>}
-      <br />
+    <form onSubmit={submitForm} className="form-container">
+      <h3 style={{ marginBottom: "2rem" }}>Lägg till:</h3>
+      <div className="form-group">
+        <label htmlFor="title">Titel:</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          value={todo.title}
+          onChange={(event) => setTodo({ ...todo, title: event.target.value })}
+          className="input-field"
+        />
+        {errors.title && <span className="error-text">{errors.title}</span>}
+      </div>
 
-      <label htmlFor="description">Beskrivning:</label>
-      <input
-        type="text"
-        name="description"
-        id="description"
-        value={todo.description}
-        onChange={(event) =>
-          setTodo({ ...todo, description: event.target.value })
-        }
-      />
-      {errors.description && <span>{errors.description}</span>}
-      <br />
+      <div className="form-group">
+        <label htmlFor="description">Beskrivning:</label>
+        <input
+          type="text"
+          name="description"
+          id="description"
+          value={todo.description}
+          onChange={(event) =>
+            setTodo({ ...todo, description: event.target.value })
+          }
+          className="input-field"
+        />
+        {errors.description && (
+          <span className="error-text">{errors.description}</span>
+        )}
+      </div>
 
-      <label htmlFor="status">Status:</label>
-      <select
-        name="status"
-        id="status"
-        value={todo.status}
-        onChange={(event) => setTodo({ ...todo, status: event.target.value })}
-      >
-        {statusValues.map((status, id) => (
-          <option key={id}>{status}</option>
-        ))}
-      </select>
-      {errors.status && <span>{errors.status}</span>}
-      <br />
+      <div className="form-group">
+        <label htmlFor="status">Status:</label>
+        <select
+          name="status"
+          id="status"
+          value={todo.status}
+          onChange={(event) => setTodo({ ...todo, status: event.target.value })}
+          className="select-field"
+        >
+          {statusValues.map((status, id) => (
+            <option key={id}>{status}</option>
+          ))}
+        </select>
+        {errors.status && <span className="error-text">{errors.status}</span>}
+      </div>
 
-      <input type="submit" value="Lägg till Todo" />
+      <button type="submit" className="submit-button">
+        Lägg till Todo
+      </button>
     </form>
   );
 };

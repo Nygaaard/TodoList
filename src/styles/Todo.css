@@ -73,3 +73,8 @@
 .delete-btn:hover {
     background: darkred;
 }
+
+.select-options {
+    padding: 0.2rem;
+    margin: 0.4rem;
+}

@@ -74,6 +74,7 @@ const Todo = ({
           id="status"
           defaultValue={todo.status}
           onChange={updateTodo}
+          className="select-options"
         >
           <option>Ej påbörjad</option>
           <option>Pågående</option>
